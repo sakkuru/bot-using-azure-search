@@ -1,11 +1,10 @@
-var request = require('request');
+const request = require('request');
 
 class Helper {
     static xhr(argUrl, callBack, method = 'GET',
         headers = { 'Content-Type': 'application/json' }, postData) {
 
         if (!postData) postData = '';
-        //オプションを定義
         let options = {
             'url': argUrl,
             'method': method,
@@ -14,7 +13,6 @@ class Helper {
             'json': true
         };
 
-        //リクエスト送信
         if (method === 'GET') {
             request.get(options, function(error, response, body) {
                 if (!error && response.statusCode === 200) {

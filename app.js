@@ -1,16 +1,16 @@
-var restify = require('restify');
-var builder = require('botbuilder');
-var Cognitive = require('./cognitive.js');
-var request = require('request');
+const restify = require('restify');
+const builder = require('botbuilder');
+const Cognitive = require('./cognitive.js');
+const request = require('request');
 
 // Setup Restify Server
-var server = restify.createServer();
+const server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function() {
     console.log('%s listening to %s', server.name, server.url);
 });
 
 // Create chat connector for communicating with the Bot Framework Service
-var connector = new builder.ChatConnector({
+const connector = new builder.ChatConnector({
     appId: process.env.MICROSOFT_APP_ID,
     appPassword: process.env.MICROSOFT_APP_PASSWORD
 });
@@ -18,9 +18,9 @@ var connector = new builder.ChatConnector({
 // Listen for messages from users 
 server.post('/api/messages', connector.listen());
 
-var bot = new builder.UniversalBot(connector, [
-    function(session) {
-        var keys = [];
+const bot = new builder.UniversalBot(connector, [
+    session => {
+        const keys = [];
         //cognitive.js 内 cognitive クラス内の keyPhrases メソッドを呼び出し 
         Cognitive.keyPhrases(session.message.text, (result) => {
             for (let doc of result.documents) {
@@ -31,14 +31,14 @@ var bot = new builder.UniversalBot(connector, [
 
             session.send('keywords: ' + keys.join(','));
 
-            var searchURL = process.env.SEARCH_URL;
+            const searchURL = process.env.SEARCH_URL;
 
-            var params = {
+            const params = {
                 "api-version": '2016-09-01',
                 search: keys.join(',')
             };
 
-            var options = {
+            const options = {
                 url: searchURL,
                 headers: {
                     'Accept': 'application/json',
@@ -49,7 +49,7 @@ var bot = new builder.UniversalBot(connector, [
 
             request.get(options, function(err, response, body) {
                 if (err) { console.log(err); return; }
-                var res = JSON.parse(response.body);
+                const res = JSON.parse(response.body);
                 session.send(res.value[0].Answer);
             });
         })

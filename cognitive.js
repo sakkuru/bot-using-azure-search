@@ -1,4 +1,4 @@
-var Helper = require('./Helper');
+const Helper = require('./Helper');
 
 class Cognitive {
 
@@ -9,7 +9,7 @@ class Cognitive {
      */
     static keyPhrases(text, callBack) {
         const ENDPOINT_URL = 'https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/keyPhrases',
-            SUBSCRIPTION_KEY = process.env.SUB;
+            SUBSCRIPTION_KEY = process.env.COG_SCRIPTION;
         let headers = {
             'Content-Type': 'application/json',
             'Ocp-Apim-Subscription-Key': SUBSCRIPTION_KEY
